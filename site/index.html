@@ -71,7 +71,7 @@
             recommendationError.innerHTML = '';
 
             // Make an AJAX request to the Flask route
-            fetch(`http://localhost:5000/recommendation/${customerId}`)
+            fetch(`https://product-recommendation-dashboard.vercel.app/recommendation/${customerId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.history.length > 0) {
