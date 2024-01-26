@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation Analytics Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Recommendation Analytics Platform</h1>
+        <h3>© Hanif Yuli Abdillah P 2024</h3>
+    </div>
+
+    <div class="container">
+    <center>
+        <form id="customerIdForm">
+            <label for="customerId"><b>Customer ID:</b></label>
+            <input type="text" id="customerId" name="customerId" required>
+            <button type="submit">Get Recommendation</button>
+        </form>
+    </center>
+    </div>
+    
+    <div class="container">
+        <div class="left">
+            <div class="history">
+                <h2 id="actionItemTitleHistory">Purchase History</h2>
+                <h3 id="historyError" style="color: red;"></h3>
+                <div id="historyCard" class="card">
+                    <!-- Full history cards will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="right">
+            <h2 id="actionItemTitleRecommendation">Recommendations</h2>
+            <h3 id="recommendationError" style="color: red;"></h3>
+            <div id="recommendationCard" class="card">
+                <!-- Recommendation cards will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const customerIdForm = document.getElementById('customerIdForm');
+        const historyCard = document.getElementById('historyCard'); // Corrected id
+        const recommendationCard = document.getElementById('recommendationCard');
+        const actionItemTitleHistory = document.getElementById('actionItemTitleHistory');
+        const actionItemTitleRecommendation = document.getElementById('actionItemTitleRecommendation');
+
+        customerIdForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const customerIdInput = document.getElementById('customerId');
+            const customerId = customerIdInput.value;
+
+            // Clear existing content and titles
+            historyCard.innerHTML = '';
+            recommendationCard.innerHTML = '';
+            actionItemTitleHistory.innerHTML = '';
+            actionItemTitleRecommendation.innerHTML = '';
+            historyError.innerHTML = '';
+            recommendationError.innerHTML = '';
+
+            // Make an AJAX request to the Flask route
+            fetch(`http://localhost:5000/recommendation/${customerId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.history.length > 0) {
+                        actionItemTitleHistory.innerHTML = `Purchase History for Customer ${customerId}`;
+                        // Update historyCard with the fetched history data
+                        data.history.forEach(item => {
+                            const historyItem = document.createElement('div');
+                            historyItem.innerHTML = `<div class="card-child"> <table> <tr> <td style="width: 20%"><strong>ID</strong></td> <td style="width: 8%"><strong>:</strong></td> <td>${item.product_id}</td> </tr> <tr> <td><strong>Category</strong></td> <td><strong>:</strong></td> <td>${item.product_category}</td> </tr> <tr> <td><strong>Price</strong></td> <td><strong>:</strong></td> <td>$${parseFloat(item.product_price).toFixed(2)}</td> </tr> <tr> <td><strong>Rating</strong></td> <td><strong>:</strong></td> <td>${item.product_rating}</td> </tr> </table> </div>`;
+                            historyCard.appendChild(historyItem);
+                        });
+                    } else {
+                        actionItemTitleHistory.innerHTML = `Purchase History for Customer ${customerId}`;
+                        historyError.innerHTML = `Sorry, No Purchase History Found`;
+                    }
+
+                    if (data.recommendation.length > 0) {
+                        actionItemTitleRecommendation.innerHTML = `Recommendation for Customer ${customerId}`;
+                        // Update recommendationCard with the fetched recommendation data
+                        data.recommendation.forEach(item => {
+                            const recommendationItem = document.createElement('div');
+                            recommendationItem.innerHTML = `<div class="card-child"> <table> <tr> <td style="width: 20%"><strong>ID</strong></td> <td style="width: 20%"><strong>:</strong></td> <td>${item.product_id}</td> </tr> <tr> <td><strong>Category</strong></td> <td><strong>:</strong></td> <td>${item.product_category}</td> </tr> <tr> <td><strong>Price</strong></td> <td><strong>:</strong></td> <td>$${parseFloat(item.product_price).toFixed(2)}</td> </tr> <tr> <td><strong>Rating</strong></td> <td><strong>:</strong></td> <td>${item.product_rating}</td> </tr> </table> </div>`;
+                            recommendationCard.appendChild(recommendationItem);
+                        });
+                    } else {
+                        actionItemTitleRecommendation.innerHTML = `Recommendation for Customer ${customerId}`;
+                        recommendationError.innerHTML = `Sorry, No Recommendation Found`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+    });
+</script>
