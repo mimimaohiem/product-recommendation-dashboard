@@ -72,3 +72,8 @@ URL: https://product-recommendation-dashboard.vercel.app/
 # **Live Dashboard Architecture Design**
 
 ![Architecture](https://raw.githubusercontent.com/hanifabd/product-recommendation-dashboard/master/static/img/architecture-webapp.png)
+
+# Run in Local
+1. Create python environment
+2. Install `requirements.txt` in that python environment
+3. run `python app.py`
