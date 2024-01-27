@@ -63,7 +63,7 @@ The primary objective is to compare the vectors for each Customer ID to identify
 
 The evaluation of the recommendation system involves computing the nDCG@5 metric, where the relevance scores are determined by assigning a score of 1 for each product category that exists in the purchasing history, multiplied by the number of occurrences of the same product category in the purchasing history. For product categories that do not exist in the purchasing history, a score of 0 is assigned. The resulting scores are organized into a list representing the predicted relevance. The nDCG@5 is then calculated by comparing this list with the sorted list of true relevance, sorted in descending order of relevance scores, to assess the system's performance in recommending relevant products.
 
-The NDCG@5 Score is 0.938284053504126. Check on `notebook/Case_Study_Predictive_Analytics_for_E_Commerce.ipynb`
+The NDCG@5 Score is `0.8484064772401175`. Check on `notebook/Case_Study_Predictive_Analytics_for_E_Commerce.ipynb`
 
 # **Live Dashboard**
 
