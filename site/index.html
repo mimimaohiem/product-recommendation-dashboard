@@ -1,114 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recommendation Analytics Platform</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}">
-</head>
-<body>
 
-    <div class="header">
-        <h1>Recommendation Analytics Platform</h1>
-        <h3>© Hanif Yuli Abdillah P 2024</h3>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommendation Analytics Platform</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="shortcut icon" href="/static/img/icon.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    .header {
+      text-align: center;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .profile-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .profile-header button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .profile-header button:hover {
+      background-color: #0056b3;
+    }
+
+    .profile-info {
+      display: flex;
+      gap: 20px;
+    }
+
+    .profile-section {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      flex: 1;
+    }
+
+    .profile-section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .profile-section table {
+      width: 100%;
+    }
+
+    .profile-section table td {
+      padding: 10px 0;
+    }
+
+    .profile-section table td:first-child {
+      font-weight: bold;
+    }
+
+    .profile-overview {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .profile-overview .overview-card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      text-align: center;
+    }
+
+    .overview-card h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #666;
+    }
+
+    .overview-card p {
+      font-size: 24px;
+      margin: 10px 0 0;
+      font-weight: bold;
+    }
+
+    .container-content {
+      margin-top: 40px;
+    }
+
+    .content {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .content>.column {
+      flex: 1;
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .card {
+      margin-top: 20px;
+    }
+
+    .card-child {
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-child table {
+      width: 100%;
+    }
+
+    .card-child table td {
+      padding: 5px;
+    }
+
+    h3 {
+      color: red;
+      margin-top: 10px;
+    }
+
+    /* Similar Customers Section */
+    .similar-customers {
+      margin-top: 40px;
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .similar-customers h2 {
+      margin-top: 0;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .customer-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .customer-item {
+      flex: 1;
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 220px;
+    }
+
+    .customer-item img {
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+    }
+
+    .customer-item h4 {
+      margin: 10px 0 5px;
+      font-size: 16px;
+    }
+
+    .customer-item p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+
+
+
+<body>
+  <div class="header">
+    <h1>Recommendation Analytics Platform</h1>
+    <h3>© Hanif Yuli Abdillah P 2024</h3>
+  </div>
+
+  <div class="container form-container">
+    <form id="customerIdForm">
+      <label for="customerId"><b>Customer ID:</b></label>
+      <input type="text" id="customerId" name="customerId" required="">
+      <button type="submit">Get Recommendation</button>
+    </form>
+  </div>
+    <div class="container">
+      
+  
+      <div class="profile-info">
+        <div class="profile-section">
+          <h2>Basic Info</h2>
+          <table>
+            <tr>
+              <td>Customer ID:</td>
+              <td id="customerId">1</td>
+            </tr>
+            <tr>
+              <td>Name:</td>
+              <td id="customerName">John Doe</td>
+            </tr>
+            <tr>
+              <td>Email:</td>
+              <td id="customerEmail">johndoe@example.com</td>
+            </tr>
+            <tr>
+              <td>Phone:</td>
+              <td id="customerPhone">+1234567890</td>
+            </tr>
+          </table>
+        </div>
+  
+        <div class="profile-section">
+          <h2>Profile</h2>
+          <div class="profile-overview">
+            <div class="overview-card">
+              <h3>Items viewed</h3>
+              <p>0</p> <!-- This will be dynamically updated -->
+            </div>
+            <div class="overview-card">
+              <h3>Purchases</h3>
+              <p>0</p> <!-- This will be dynamically updated -->
+            </div>
+            <div class="overview-card">
+              <h3>Time Spent</h3>
+              <p>0</p> <!-- This will be dynamically updated -->
+            </div>
+          </div>
+        </div>
+        
+      </div>
+  
+      <div class="container-content">
+        <!-- Your existing content such as recommendations, purchase history, etc. will be here -->
+      </div>
     </div>
 
-    <div class="container">
-    <center>
-        <form id="customerIdForm">
-            <label for="customerId"><b>Customer ID:</b></label>
-            <input type="text" id="customerId" name="customerId" required>
-            <button type="submit">Get Recommendation</button>
-        </form>
-    </center>
+    <div class="container similar-customers">
+      <h2>Similar Customers</h2> <!-- Keep the heading inside the container -->
+      <div class="customer-list">
+        <div class="customer-item">
+          <img src="https://via.placeholder.com/80" alt="Customer 1">
+          <h4>Jane Smith</h4>
+          <p>Purchased: 5 Items</p>
+        </div>
+        <div class="customer-item">
+          <img src="https://via.placeholder.com/80" alt="Customer 2">
+          <h4>Michael Johnson</h4>
+          <p>Purchased: 3 Items</p>
+        </div>
+        <div class="customer-item">
+          <img src="https://via.placeholder.com/80" alt="Customer 3">
+          <h4>Emily Davis</h4>
+          <p>Purchased: 4 Items</p>
+        </div>
+      </div>
     </div>
     
-    <div class="container">
-        <div class="left">
-            <div class="history">
-                <h2 id="actionItemTitleHistory">Purchase History</h2>
-                <h3 id="historyError" style="color: red;"></h3>
-                <div id="historyCard" class="card">
-                    <!-- Full history cards will be dynamically added here -->
-                </div>
-            </div>
-        </div>
+  
+    <script>
+      // Example data, you can fetch this from your API instead
+      const customerData = {
+        customer_id: 1,
+        name: "John Doe",
+        email: "johndoe@example.com",
+        phone: "+1234567890",
+        items_viewed: 7,
+        purchases: 2,
+        revenue: 71.00
+      };
+  
+      // Populate the data in the page
+      document.getElementById('customerId').textContent = customerData.customer_id;
+      document.getElementById('customerName').textContent = customerData.name;
+      document.getElementById('customerEmail').textContent = customerData.email;
+      document.getElementById('customerPhone').textContent = customerData.phone;
+    </script>
 
-        <div class="right">
-            <h2 id="actionItemTitleRecommendation">Recommendations</h2>
-            <h3 id="recommendationError" style="color: red;"></h3>
-            <div id="recommendationCard" class="card">
-                <!-- Recommendation cards will be dynamically added here -->
-            </div>
-        </div>
+
+    
+
+  <div class="container content">
+    <div class="column">
+      <h2 id="actionItemTitleHistory">Purchase History</h2>
+      <h3 id="historyError"></h3>
+      <div id="historyCard" class="card">
+        <!-- Full history cards will be dynamically added here -->
+      </div>
     </div>
 
-</body>
-</html>
+    <div class="column">
+      <h2 id="actionItemTitleRecommendation">Recommendations</h2>
+      <h3 id="recommendationError"></h3>
+      <div id="recommendationCard" class="card">
+        <!-- Recommendation cards will be dynamically added here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const customerIdForm = document.getElementById('customerIdForm');
+      const historyCard = document.getElementById('historyCard');
+      const recommendationCard = document.getElementById('recommendationCard');
+      const actionItemTitleHistory = document.getElementById('actionItemTitleHistory');
+      const actionItemTitleRecommendation = document.getElementById('actionItemTitleRecommendation');
+      const historyError = document.getElementById('historyError');
+      const recommendationError = document.getElementById('recommendationError');
+    
+      // Elements for profile info
+      const profileCustomerId = document.querySelector('.profile-section #customerId');
+      const profileCustomerName = document.querySelector('.profile-section #customerName');
+      const profileCustomerEmail = document.querySelector('.profile-section #customerEmail');
+      const profileCustomerPhone = document.querySelector('.profile-section #customerPhone');
+    
+      // Elements for similar customers section
+      const similarCustomersContainer = document.querySelector('.similar-customers .customer-list');
+    
+      customerIdForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+    
+        const customerIdInput = document.getElementById('customerId');
+        const customerId = customerIdInput.value.trim();
+    
+        if (!/^\d+$/.test(customerId)) {
+          alert("Please enter a valid Customer ID (Integer). Existing Customer ID is 1 to 50");
+          return;
+        }
+    
+        // Clear previous results
+        historyCard.innerHTML = '';
+        recommendationCard.innerHTML = '';
+        actionItemTitleHistory.textContent = '';
+        actionItemTitleRecommendation.textContent = '';
+        historyError.textContent = '';
+        recommendationError.textContent = '';
+        similarCustomersContainer.innerHTML = ''; // Clear the similar customers list
+    
+        fetch(`http://127.0.0.1:5000/recommendation/${customerId}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.user_info) {
+              // Update profile info
+              profileCustomerId.textContent = data.user_info.customer_id;
+              profileCustomerName.textContent = data.user_info.name;
+              profileCustomerEmail.textContent = data.user_info.email;
+              profileCustomerPhone.textContent = data.user_info.phone;
+            } else {
+              alert("Customer not found");
+              return;
+            }
+    
+            // Display Purchase History
+            if (data.history && data.history.length > 0) {
+              actionItemTitleHistory.textContent = `Purchase History for Customer ${customerId}`;
+              data.history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'card-child';
+                historyItem.innerHTML = `
+                  <table>
+                    <tr><td><strong>ID</strong></td><td>:</td><td>${item.product_id}</td></tr>
+                    <tr><td><strong>Category</strong></td><td>:</td><td>${item.product_category}</td></tr>
+                    <tr><td><strong>Price</strong></td><td>:</td><td>$${parseFloat(item.product_price).toFixed(2)}</td></tr>
+                    <tr><td><strong>Rating</strong></td><td>:</td><td>${item.product_rating}</td></tr>
+                  </table>`;
+                historyCard.appendChild(historyItem);
+              });
+            } else {
+              actionItemTitleHistory.textContent = `Purchase History for Customer ${customerId}`;
+              historyError.textContent = `Sorry, no purchase history found.`;
+            }
+    
+            // Display Recommendations
+            if (data.recommendation && data.recommendation.length > 0) {
+              actionItemTitleRecommendation.textContent = `Recommendations for Customer ${customerId}`;
+              data.recommendation.forEach(item => {
+                const recommendationItem = document.createElement('div');
+                recommendationItem.className = 'card-child';
+                recommendationItem.innerHTML = `
+                  <table>
+                    <tr><td><strong>ID</strong></td><td>:</td><td>${item.product_id}</td></tr>
+                    <tr><td><strong>Category</strong></td><td>:</td><td>${item.product_category}</td></tr>
+                    <tr><td><strong>Price</strong></td><td>:</td><td>$${parseFloat(item.product_price).toFixed(2)}</td></tr>
+                    <tr><td><strong>Rating</strong></td><td>:</td><td>${item.product_rating}</td></tr>
+                    <tr><td><strong>Score</strong></td><td>:</td><td>${item.score !== undefined ? item.score.toFixed(2) : 'N/A'}</td></tr>
+                    <tr><td><strong>Similar Customers</strong></td><td>:</td><td>
+                      ${item.similar_customers.map(similar => `
+                        <div>
+                          <strong>Customer ID:</strong> ${similar.customer_id}, <strong>Score:</strong> ${similar.similarity_score}
+                        </div>
+                      `).join('')}
+                    </td></tr>
+                  </table>`;
+                recommendationCard.appendChild(recommendationItem);
+              });
+            } else {
+              actionItemTitleRecommendation.textContent = `Recommendations for Customer ${customerId}`;
+              recommendationError.textContent = `Sorry, no recommendations found.`;
+            }
+    
+            // Display Similar Customers
+            if (data.similar_customers && data.similar_customers.length > 0) {
+              console.log("Similar customers found:", data.similar_customers); // Debugging log
+              data.similar_customers.forEach(customer => {
+                const customerItem = document.createElement('div');
+                customerItem.className = 'customer-item';
+                customerItem.innerHTML = `
+                  <img src="https://via.placeholder.com/80" alt="Customer ${customer.customer_id}">
+                  <h4>${customer.name}</h4>
+                  <p>Purchased: ${customer.purchased_items} Items</p>`;
+                similarCustomersContainer.appendChild(customerItem);
+              });
+            } else {
+              console.log("No similar customers found."); // Debugging log
+              similarCustomersContainer.innerHTML = '<p>No similar customers found.</p>';
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      });
+    });
+    
+    
+  </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const customerIdForm = document.getElementById('customerIdForm');
-        const historyCard = document.getElementById('historyCard'); // Corrected id
-        const recommendationCard = document.getElementById('recommendationCard');
-        const actionItemTitleHistory = document.getElementById('actionItemTitleHistory');
-        const actionItemTitleRecommendation = document.getElementById('actionItemTitleRecommendation');
-
-        customerIdForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const customerIdInput = document.getElementById('customerId');
-            const customerId = customerIdInput.value;
-
-            // Check if the customer ID is an integer
-            if (!/^\d+$/.test(customerId)) {
-                alert("Please enter a valid Customer ID (Integer). Existing Customer ID is 1 to 50");
-                return; // Exit the function if the ID is not an integer
-            }
-
-            // Clear existing content and titles
-            historyCard.innerHTML = '';
-            recommendationCard.innerHTML = '';
-            actionItemTitleHistory.innerHTML = '';
-            actionItemTitleRecommendation.innerHTML = '';
-            historyError.innerHTML = '';
-            recommendationError.innerHTML = '';
-
-            // Make an AJAX request to the Flask route
-            fetch(`https://product-recommendation-dashboard.vercel.app/recommendation/${customerId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.history.length > 0) {
-                        actionItemTitleHistory.innerHTML = `Purchase History for Customer ${customerId}`;
-                        // Update historyCard with the fetched history data
-                        data.history.forEach(item => {
-                            const historyItem = document.createElement('div');
-                            historyItem.innerHTML = `<div class="card-child"> <table> <tr> <td style="width: 20%"><strong>ID</strong></td> <td style="width: 8%"><strong>:</strong></td> <td>${item.product_id}</td> </tr> <tr> <td><strong>Category</strong></td> <td><strong>:</strong></td> <td>${item.product_category}</td> </tr> <tr> <td><strong>Price</strong></td> <td><strong>:</strong></td> <td>$${parseFloat(item.product_price).toFixed(2)}</td> </tr> <tr> <td><strong>Rating</strong></td> <td><strong>:</strong></td> <td>${item.product_rating}</td> </tr> </table> </div>`;
-                            historyCard.appendChild(historyItem);
-                        });
-                    } else {
-                        actionItemTitleHistory.innerHTML = `Purchase History for Customer ${customerId}`;
-                        historyError.innerHTML = `Sorry, No Purchase History Found`;
-                    }
-
-                    if (data.recommendation.length > 0) {
-                        actionItemTitleRecommendation.innerHTML = `Recommendation for Customer ${customerId}`;
-                        // Update recommendationCard with the fetched recommendation data
-                        data.recommendation.forEach(item => {
-                            const recommendationItem = document.createElement('div');
-                            recommendationItem.innerHTML = `<div class="card-child"> <table> <tr> <td style="width: 20%"><strong>ID</strong></td> <td style="width: 20%"><strong>:</strong></td> <td>${item.product_id}</td> </tr> <tr> <td><strong>Category</strong></td> <td><strong>:</strong></td> <td>${item.product_category}</td> </tr> <tr> <td><strong>Price</strong></td> <td><strong>:</strong></td> <td>$${parseFloat(item.product_price).toFixed(2)}</td> </tr> <tr> <td><strong>Rating</strong></td> <td><strong>:</strong></td> <td>${item.product_rating}</td> </tr> </table> </div>`;
-                            recommendationCard.appendChild(recommendationItem);
-                        });
-                    } else {
-                        actionItemTitleRecommendation.innerHTML = `Recommendation for Customer ${customerId}`;
-                        recommendationError.innerHTML = `Sorry, No Recommendation Found`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
+  document.addEventListener('DOMContentLoaded', function () {
+    const customerIdForm = document.getElementById('customerIdForm');
+    const similarCustomersContainer = document.querySelector('.similar-customers .customer-list');
+  
+    customerIdForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+  
+      const customerIdInput = document.getElementById('customerId');
+      const customerId = customerIdInput.value.trim();
+  
+      if (!/^\d+$/.test(customerId)) {
+        alert("Please enter a valid Customer ID (Integer). Existing Customer ID is 1 to 50");
+        return;
+      }
+  
+      fetch(`http://127.0.0.1:5000/recommendation/${customerId}`)
+        .then(response => response.json())
+        .then(data => {
+          // Clear previous similar customers
+          similarCustomersContainer.innerHTML = '';
+  
+          // Display Similar Customers
+          if (data.similar_customers && data.similar_customers.length > 0) {
+            data.similar_customers.forEach(customer => {
+              const customerItem = document.createElement('div');
+              customerItem.className = 'customer-item';
+              customerItem.innerHTML = `
+                <img src="https://via.placeholder.com/80" alt="Customer ${customer.customer_id}">
+                <h4>Customer ID: ${customer.customer_id}</h4>
+                <h4>${customer.name}</h4>
+                <p>Purchased: ${customer.purchased_items} Items</p>`;
+              similarCustomersContainer.appendChild(customerItem);
+            });
+          } else {
+            similarCustomersContainer.innerHTML = '<p>No similar customers found.</p>';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
         });
     });
+  });
+  
+  
 </script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const customerIdForm = document.getElementById('customerIdForm');
+    
+    // Elements for the profile overview
+    const itemsViewedElement = document.querySelector('.profile-overview .overview-card:nth-child(1) p');
+    const purchasesElement = document.querySelector('.profile-overview .overview-card:nth-child(2) p');
+    const timeSpentElement = document.querySelector('.profile-overview .overview-card:nth-child(3) p');
+  
+    customerIdForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+  
+      const customerIdInput = document.getElementById('customerId');
+      const customerId = customerIdInput.value.trim();
+  
+      if (!/^\d+$/.test(customerId)) {
+        alert("Please enter a valid Customer ID (Integer). Existing Customer ID is 1 to 50");
+        return;
+      }
+  
+      fetch(`http://127.0.0.1:5000/customer-stats/${customerId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            // Update the profile overview with fetched data
+            itemsViewedElement.textContent = data.customer_page_views;
+            purchasesElement.textContent = data.products_purchased;
+            timeSpentElement.textContent = data.customer_time_spent;
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching customer stats:', error);
+        });
+    });
+  });
+  
+</script>
+</body>
+
+</html>
